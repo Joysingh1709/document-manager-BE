@@ -19,7 +19,7 @@ public class MainController {
     @RequestMapping(path = "/api", method = RequestMethod.GET)
     public JSONObject apiTest() {
         JSONObject res = new JSONObject();
-        res.put("data", "Greetings from Document manager backend..!");
+        res.put("data", "Greetings from Document manager backend on heroku..!");
         res.put("errCode", 0);
         res.put("success", true);
         return res;
