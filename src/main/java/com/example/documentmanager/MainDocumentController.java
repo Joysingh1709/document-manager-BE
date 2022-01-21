@@ -7,7 +7,14 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import com.example.documentmanager.services.UploadObjectService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.api.client.json.Json;
 import com.google.cloud.storage.Blob;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,7 +54,7 @@ public class MainDocumentController {
         }
     }
 
-    @RequestMapping(value = "/getAllDocs/{userId}", method = RequestMethod.GET)
+    @RequestMapping(value = "getAllDocs/{userId}", method = RequestMethod.GET)
     public ResponseEntity<?> getAllDocs(@PathVariable String userId)
             throws NumberFormatException, InterruptedException, ExecutionException, IOException {
         val res = new HashMap<>();
@@ -63,20 +70,34 @@ public class MainDocumentController {
         }
     }
 
-    @RequestMapping(value = "/createDocument/{docRefId}", method = RequestMethod.POST)
+    @RequestMapping(value = "createDocument/{docRefId}", method = RequestMethod.POST)
     public ResponseEntity<?> createDocument(@PathVariable(value = "docRefId", required = true) String docRefId,
             @RequestParam(value = "file", required = true) MultipartFile file,
-            @RequestParam(value = "path", required = true) String path)
-            throws ExecutionException, InterruptedException {
+            @RequestParam(value = "path", required = true) String path,
+            @RequestParam(value = "filePathMap", required = true) String filePathMap)
+            throws ExecutionException, InterruptedException, JsonMappingException, JsonProcessingException {
+        TypeReference<HashMap<String, Object>> typeRef = new TypeReference<HashMap<String, Object>>() {
+        };
+        Map<String, Object> fileMapping = new ObjectMapper().readValue(filePathMap, typeRef);
 
-        System.out.println(docService.createDocuments(path, file));
+        System.out.println("filePathMap : " + fileMapping);
 
+        String p = docService.createDocuments(path, file, docRefId, fileMapping);
         val response = new HashMap<>();
-        response.put("status", true);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+
+        if (p != null) {
+            response.put("status", true);
+            response.put("message", "File successfully uploaded");
+            response.put("path", p);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            response.put("status", false);
+            response.put("message", "File upload Failed..!");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @RequestMapping(value = "/getSignedUrl/{docName}", method = RequestMethod.GET)
+    @RequestMapping(value = "getSignedUrl/{docName}", method = RequestMethod.GET)
     public ResponseEntity<?> getSignedUrl(@PathVariable String docName,
             @RequestParam(value = "path", required = true) String path)
             throws ExecutionException, InterruptedException, IOException {

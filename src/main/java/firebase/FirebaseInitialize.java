@@ -2,7 +2,6 @@ package firebase;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -15,15 +14,15 @@ import com.google.cloud.storage.StorageOptions;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
-import com.google.firebase.database.DatabaseReference;
 
-import com.google.cloud.storage.Bucket;
-import com.google.cloud.storage.Storage;
-
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class FirebaseInitialize {
+
+    @Value("${service.account.path}")
+    private String serviceAccountPath;
 
     public static StorageOptions storageOptions;
     // private DatabaseReference mDatabase;
@@ -32,12 +31,19 @@ public class FirebaseInitialize {
     @SuppressWarnings("derecation")
     public void initilize() throws IOException {
 
-        ClassLoader classLoader = DocumentManagerApplication.class.getClassLoader();
+        // ClassLoader classLoader = DocumentManagerApplication.class.getClassLoader();
+        //
+        // File serviceAccFile = new File(
+        // Objects.requireNonNull(classLoader.getResource("serviceAccountKey.json")).getFile());
+        //
+        // FileInputStream serviceAccount = new
+        // FileInputStream(serviceAccFile.getAbsolutePath());
 
-        File serviceAccFile = new File(
-                Objects.requireNonNull(classLoader.getResource("serviceAccountKey.json")).getFile());
+        System.out.println("***************************************************************");
+        System.out.println(serviceAccountPath);
+        System.out.println("***************************************************************");
 
-        FileInputStream serviceAccount = new FileInputStream(serviceAccFile.getAbsolutePath());
+        FileInputStream serviceAccount = new FileInputStream(serviceAccountPath);
 
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();
