@@ -21,19 +21,20 @@ public class DocumentManagerApplication {
 
 	public static void main(String[] args) throws IOException {
 
-		ClassLoader classLoader = DocumentManagerApplication.class.getClassLoader();
-
-		File serviceAccFile = new File(
-				Objects.requireNonNull(classLoader.getResource("serviceAccountKey.json")).getFile());
-
-		FileInputStream serviceAccount = new FileInputStream(serviceAccFile.getAbsolutePath());
-
-		FirebaseOptions options = new FirebaseOptions.Builder()
-				.setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();
-
-		if (FirebaseApp.getApps().isEmpty()) {
-			FirebaseApp.initializeApp(options);
-		}
+		// ClassLoader classLoader = DocumentManagerApplication.class.getClassLoader();
+		//
+		// File serviceAccFile = new File(
+		// Objects.requireNonNull(classLoader.getResource("serviceAccountKey.json")).getFile());
+		//
+		// FileInputStream serviceAccount = new
+		// FileInputStream(serviceAccFile.getAbsolutePath());
+		//
+		// FirebaseOptions options = new FirebaseOptions.Builder()
+		// .setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();
+		//
+		// if (FirebaseApp.getApps().isEmpty()) {
+		// FirebaseApp.initializeApp(options);
+		// }
 
 		SpringApplication.run(DocumentManagerApplication.class, args);
 	}

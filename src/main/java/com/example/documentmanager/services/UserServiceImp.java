@@ -2,12 +2,14 @@ package com.example.documentmanager.services;
 
 import java.util.concurrent.ExecutionException;
 
+import com.example.documentmanager.ResourceConfig;
 import com.example.documentmanager.models.User;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.WriteResult;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import firebase.FirebaseInitialize;
