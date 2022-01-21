@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import net.minidev.json.JSONObject;
 
 @RestController
-@CrossOrigin(origins = { "http://localhost:8100", "http://192.168.29.38:8100" })
+@CrossOrigin(origins = { "http://localhost:8100", "http://192.168.29.38:8100",
+        "https://documentmanager.vercel.app" })
 public class MainController {
 
     @RequestMapping(path = "/", method = RequestMethod.GET)

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin(origins = { "http://localhost:8100", "http://192.168.29.38:8100" })
+@CrossOrigin(origins = { "http://localhost:8100", "http://192.168.29.38:8100", "https://documentmanager.vercel.app" })
 @RequestMapping(value = "/api/v1/users")
 public class UserController {
 

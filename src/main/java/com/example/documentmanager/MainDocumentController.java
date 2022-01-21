@@ -30,7 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.val;
 
 @RestController
-@CrossOrigin(origins = { "http://localhost:8100", "http://192.168.29.38:8100" })
+@CrossOrigin(origins = { "http://localhost:8100", "http://192.168.29.38:8100", "https://documentmanager.vercel.app" })
 @RequestMapping(value = "/api/v1/docs")
 public class MainDocumentController {
 
