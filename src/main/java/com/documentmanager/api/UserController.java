@@ -1,9 +1,9 @@
-package com.example.documentmanager;
+package com.documentmanager.api;
 
 import java.util.concurrent.ExecutionException;
 
-import com.example.documentmanager.models.User;
-import com.example.documentmanager.services.UserService;
+import com.documentmanager.api.models.User;
+import com.documentmanager.api.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

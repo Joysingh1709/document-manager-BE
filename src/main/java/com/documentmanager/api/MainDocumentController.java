@@ -1,4 +1,4 @@
-package com.example.documentmanager;
+package com.documentmanager.api;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-import com.example.documentmanager.services.UploadObjectService;
+import com.documentmanager.api.services.UploadObjectService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;

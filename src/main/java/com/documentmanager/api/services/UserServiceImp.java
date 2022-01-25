@@ -1,8 +1,9 @@
-package com.example.documentmanager.services;
+package com.documentmanager.api.services;
 
 import java.util.concurrent.ExecutionException;
 
-import com.example.documentmanager.models.User;
+import com.documentmanager.api.config.FirebaseInitilizer;
+import com.documentmanager.api.models.User;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
@@ -10,12 +11,10 @@ import com.google.cloud.firestore.WriteResult;
 
 import org.springframework.stereotype.Service;
 
-import firebase.FirebaseInitialize;
-
 @Service
 public class UserServiceImp implements UserService {
 
-    private FirebaseInitialize dbService = new FirebaseInitialize();
+    private FirebaseInitilizer dbService = new FirebaseInitilizer();
 
     @Override
     public User getUser(String userId) throws NumberFormatException, InterruptedException, ExecutionException {

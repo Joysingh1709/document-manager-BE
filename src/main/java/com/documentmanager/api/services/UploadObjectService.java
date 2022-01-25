@@ -1,4 +1,4 @@
-package com.example.documentmanager.services;
+package com.documentmanager.api.services;
 
 import java.io.IOException;
 import java.util.HashMap;

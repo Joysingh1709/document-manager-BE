@@ -1,8 +1,8 @@
-package com.example.documentmanager.services;
+package com.documentmanager.api.services;
 
 import java.util.concurrent.ExecutionException;
 
-import com.example.documentmanager.models.User;
+import com.documentmanager.api.models.User;
 
 public interface UserService {
 

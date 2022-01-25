@@ -1,4 +1,4 @@
-package com.example.documentmanager.models;
+package com.documentmanager.api.models;
 
 import java.io.File;
 

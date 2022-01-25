@@ -1,4 +1,4 @@
-package com.example.documentmanager.services;
+package com.documentmanager.api.services;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,34 +15,29 @@ import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
-// import java.nio.file.Files;
-// import java.nio.file.Paths;
 
 import com.google.cloud.storage.Blob;
-import com.example.documentmanager.DocumentManagerApplication;
+import com.documentmanager.api.DocumentManagerApplication;
+import com.documentmanager.api.config.FirebaseInitilizer;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
-// import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.SetOptions;
 import com.google.cloud.firestore.WriteResult;
 
-// import com.google.cloud.firestore.WriteResult;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import firebase.FirebaseInitialize;
 
 @Service
 public class UploadObjectImpService implements UploadObjectService {
 
     private static final String BUCKET_NAME = "document-manager-73275.appspot.com";
 
-    private FirebaseInitialize dbService = new FirebaseInitialize();
+    private FirebaseInitilizer dbService = new FirebaseInitilizer();
 
     @Override
     public List<Blob> getDocuments(String userId) throws InterruptedException, ExecutionException, IOException {
@@ -96,23 +91,24 @@ public class UploadObjectImpService implements UploadObjectService {
 
         DocumentReference docRef = dbService.getFirebaseFirestore().collection("documentRefs").document(docRefId);
 
-//         String objPath = (path != null) ? path.replace("/", ".") : "documentTree";
-//         objPath = (objPath.equals("documentTree")) ? objPath : "documentTree." + objPath + ".contents";
-//         int index = fileName.lastIndexOf('.');
-//         String extension = fileName.substring(index + 1);
-// 
-//         Map<String, Object> fileContents = new HashMap<>();
-//         fileContents.put("createdDate", Timestamp.now());
-//         fileContents.put("ext", "." + extension);
-//         fileContents.put("fileRefUrl", "");
-//         fileContents.put("type", "file");
-// 
-//         Map<String, Object> fileObject = new HashMap<>();
-//         fileObject.put(fileName, fileContents);
-// 
-//         // Update desired data with object path
-//         Map<String, Object> updates = new HashMap<>();
-//         updates.put(objPath, fileObject);
+        // String objPath = (path != null) ? path.replace("/", ".") : "documentTree";
+        // objPath = (objPath.equals("documentTree")) ? objPath : "documentTree." +
+        // objPath + ".contents";
+        // int index = fileName.lastIndexOf('.');
+        // String extension = fileName.substring(index + 1);
+        //
+        // Map<String, Object> fileContents = new HashMap<>();
+        // fileContents.put("createdDate", Timestamp.now());
+        // fileContents.put("ext", "." + extension);
+        // fileContents.put("fileRefUrl", "");
+        // fileContents.put("type", "file");
+        //
+        // Map<String, Object> fileObject = new HashMap<>();
+        // fileObject.put(fileName, fileContents);
+        //
+        // // Update desired data with object path
+        // Map<String, Object> updates = new HashMap<>();
+        // updates.put(objPath, fileObject);
 
         // Async update document
         ApiFuture<WriteResult> writeResult = docRef.set(fileMapping, SetOptions.merge());

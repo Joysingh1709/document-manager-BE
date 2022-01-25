@@ -1,4 +1,4 @@
-package com.example.documentmanager.models;
+package com.documentmanager.api.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

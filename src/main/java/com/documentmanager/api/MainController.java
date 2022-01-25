@@ -1,11 +1,10 @@
-package com.example.documentmanager;
+package com.documentmanager.api;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
+import java.util.HashMap;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import net.minidev.json.JSONObject;
 
 @RestController
 @CrossOrigin(origins = { "http://localhost:8100", "http://192.168.29.38:8100",
@@ -18,10 +17,10 @@ public class MainController {
     }
 
     @RequestMapping(path = "/api", method = RequestMethod.GET)
-    public JSONObject apiTest() {
-        JSONObject res = new JSONObject();
+    public HashMap<String, Object> apiTest() {
+        HashMap<String, Object> res = new HashMap<String, Object>();
         res.put("data", "Greetings from Document manager backend on heroku..!");
-        res.put("errCode", 0);
+        res.put("errCode", "0");
         res.put("success", true);
         return res;
     }
