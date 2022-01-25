@@ -29,6 +29,7 @@ import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.SetOptions;
 import com.google.cloud.firestore.WriteResult;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,6 +37,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class UploadObjectImpService implements UploadObjectService {
 
     private static final String BUCKET_NAME = "document-manager-73275.appspot.com";
+
+    @Value("${service.account.path}")
+    private String serviceAccountPath;
 
     private FirebaseInitilizer dbService = new FirebaseInitilizer();
 
@@ -158,16 +162,10 @@ public class UploadObjectImpService implements UploadObjectService {
 
     public Storage getBucketRef() throws JsonParseException, JsonMappingException, IOException {
 
-        ClassLoader classLoader = DocumentManagerApplication.class.getClassLoader();
-        File serviceAccFile = new File(
-                Objects.requireNonNull(classLoader.getResource("serviceAccountKey.json")).getFile());
-
-        FileInputStream serviceAccount = new FileInputStream(serviceAccFile.getAbsolutePath());
-
-        HashMap<String, String> serviceFileJsonMap = new ObjectMapper().readValue(serviceAccFile, HashMap.class);
+        FileInputStream serviceAccount = new FileInputStream(serviceAccountPath);
 
         Storage storage = StorageOptions.newBuilder().setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .setProjectId((String) serviceFileJsonMap.get("project_id"))
+                .setProjectId("document-manager-73275")
                 .build()
                 .getService();
 
