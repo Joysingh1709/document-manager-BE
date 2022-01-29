@@ -21,4 +21,9 @@ public interface UploadObjectService {
 
         public String getSignedUrlForDocument(String path, String fileName)
                         throws ExecutionException, InterruptedException;
+
+        public String initFolder(String docRefId);
+
+        public String createFolder(String docRefId, String path, String folderName, Map<String, Object> folderMapping)
+                        throws InterruptedException, ExecutionException;
 }

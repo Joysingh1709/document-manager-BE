@@ -33,6 +33,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import lombok.val;
+
 @Service
 public class UploadObjectImpService implements UploadObjectService {
 
@@ -94,28 +96,20 @@ public class UploadObjectImpService implements UploadObjectService {
             throws InterruptedException, ExecutionException {
 
         DocumentReference docRef = dbService.getFirebaseFirestore().collection("documentRefs").document(docRefId);
+        ApiFuture<WriteResult> writeResult = docRef.set(fileMapping, SetOptions.merge());
+        // ...
+        System.out.println("Update time : " + writeResult.get().getUpdateTime());
 
-        // String objPath = (path != null) ? path.replace("/", ".") : "documentTree";
-        // objPath = (objPath.equals("documentTree")) ? objPath : "documentTree." +
-        // objPath + ".contents";
-        // int index = fileName.lastIndexOf('.');
-        // String extension = fileName.substring(index + 1);
-        //
-        // Map<String, Object> fileContents = new HashMap<>();
-        // fileContents.put("createdDate", Timestamp.now());
-        // fileContents.put("ext", "." + extension);
-        // fileContents.put("fileRefUrl", "");
-        // fileContents.put("type", "file");
-        //
-        // Map<String, Object> fileObject = new HashMap<>();
-        // fileObject.put(fileName, fileContents);
-        //
-        // // Update desired data with object path
-        // Map<String, Object> updates = new HashMap<>();
-        // updates.put(objPath, fileObject);
+        return writeResult.get().getUpdateTime().toDate().toString();
+    }
+
+    public String updateFolderInDocRefTree(String docRefId, Map<String, Object> folderMapping)
+            throws InterruptedException, ExecutionException {
+
+        DocumentReference docRef = dbService.getFirebaseFirestore().collection("documentRefs").document(docRefId);
 
         // Async update document
-        ApiFuture<WriteResult> writeResult = docRef.set(fileMapping, SetOptions.merge());
+        ApiFuture<WriteResult> writeResult = docRef.set(folderMapping, SetOptions.merge());
         // ...
         System.out.println("Update time : " + writeResult.get().getUpdateTime());
 
@@ -170,6 +164,82 @@ public class UploadObjectImpService implements UploadObjectService {
                 .getService();
 
         return storage;
+    }
+
+    @Override
+    public String initFolder(String docRefId) {
+
+        try {
+            File emptyFile = new File("ghostFile.txt");
+            emptyFile.createNewFile();
+
+            byte[] byteArray = new byte[(int) emptyFile.length()];
+
+            BlobId blobId = BlobId.of(BUCKET_NAME, docRefId + "/" + "ghostFile.txt");
+
+            BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
+
+            this.getBucketRef().create(blobInfo, byteArray);
+
+            System.out.println(
+                    "ghost File at : " + " uploaded to bucket " + BUCKET_NAME + " as "
+                            + "ghostFile.txt");
+
+            emptyFile.delete();
+
+            DocumentReference docRef = dbService.getFirebaseFirestore().collection("documentRefs").document(docRefId);
+
+            val documentTree = new HashMap<>();
+            documentTree.put("documentTree", new HashMap<>());
+
+            docRef.set(documentTree);
+
+            return "Directory initiated at : /" + docRefId + "/";
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public String createFolder(String docRefId, String path, String folderName, Map<String, Object> folderMapping)
+            throws InterruptedException, ExecutionException {
+        try {
+            File emptyFile = new File("ghostFile.txt");
+            emptyFile.createNewFile();
+
+            byte[] byteArray = new byte[(int) emptyFile.length()];
+
+            String pathWithoutContents = (!path.isEmpty()) ? path.replace("/contents", "") : path;
+
+            System.out.println("path : " + pathWithoutContents);
+
+            BlobId blobId = (!path.isEmpty())
+                    ? BlobId.of(BUCKET_NAME,
+                            docRefId + "/" + pathWithoutContents + "/" + folderName + "/" + "ghostFile.txt")
+                    : BlobId.of(BUCKET_NAME, docRefId + "/" + folderName + "/" + "ghostFile.txt");
+
+            BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
+
+            this.getBucketRef().create(blobInfo, byteArray);
+
+            String res = this.updateFolderInDocRefTree(docRefId, folderMapping);
+
+            System.out.println(
+                    "Folder at : " + pathWithoutContents + "/" + folderName + " Created to bucket " + BUCKET_NAME
+                            + " as "
+                            + folderName
+                            + " at : " + res);
+
+            emptyFile.delete();
+
+            return (!path.isEmpty()) ? docRefId + "/" + pathWithoutContents + "/" + folderName + "/"
+                    : docRefId + "/" + folderName + "/";
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

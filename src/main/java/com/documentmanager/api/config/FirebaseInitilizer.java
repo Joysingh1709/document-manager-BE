@@ -27,8 +27,7 @@ public class FirebaseInitilizer {
     private void initilize() throws IOException {
 
         System.out.println("*****************************Firebase Initialize**********************************");
-        System.out.println(serviceAccountPath);
-        System.out.println("***************************************************************");
+        System.out.println("**********************************************************************************");
 
         FileInputStream serviceAccount = new FileInputStream(serviceAccountPath);
 

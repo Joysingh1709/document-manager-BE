@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -64,6 +65,43 @@ public class MainDocumentController {
             res.put("status", false);
             res.put("data", data);
             return new ResponseEntity<>(res, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @RequestMapping(value = "initFolder/{docRefId}", method = RequestMethod.POST)
+    public ResponseEntity<?> initFolder(@PathVariable String docRefId)
+            throws NumberFormatException, InterruptedException, ExecutionException, IOException {
+        val res = new HashMap<>();
+        String s = docService.initFolder(docRefId);
+        if (s != null) {
+            res.put("status", true);
+            res.put("message", s);
+            return new ResponseEntity<>(res, HttpStatus.OK);
+        } else {
+            res.put("status", false);
+            res.put("message", "Cannot create folder");
+            return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "createFolder/{docRefId}", method = RequestMethod.POST)
+    public ResponseEntity<?> createFolder(@PathVariable String docRefId, @RequestBody Map<String, Object> body)
+            throws NumberFormatException, InterruptedException, ExecutionException, IOException {
+        val res = new HashMap<>();
+
+        System.out.println("PATH : " + body.get("path").toString());
+        System.out.println("Folder Name : " + body.get("folderName").toString());
+        System.out.println("Folder path name : " + (Map<String, Object>) body.get("folderPathMap"));
+        String s = docService.createFolder(docRefId, body.get("path").toString(), body.get("folderName").toString(),
+                (Map<String, Object>) body.get("folderPathMap"));
+        if (s != null) {
+            res.put("status", true);
+            res.put("message", s);
+            return new ResponseEntity<>(res, HttpStatus.OK);
+        } else {
+            res.put("status", false);
+            res.put("message", "Cannot create folder");
+            return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

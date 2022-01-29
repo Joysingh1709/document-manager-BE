@@ -49,17 +49,4 @@ public class UserController {
         }
     }
 
-    // @RequestMapping(value = "/{userId}", method = RequestMethod.POST)
-    // public ResponseEntity<?> setUser(@PathVariable String userId, @RequestBody
-    // User body)
-    // throws NumberFormatException, InterruptedException, ExecutionException {
-    //
-    // User user = this.userService.setUser(userId, body);
-    //
-    // if (user != null) {
-    // return new ResponseEntity<>(user, HttpStatus.OK);
-    // } else {
-    // return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    // }
-    // }
 }
