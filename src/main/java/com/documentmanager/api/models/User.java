@@ -27,7 +27,7 @@ public class User {
 
     private String pictureUrl;
 
-    private Long docsCount;
+    private Integer docsCount;
 
     private Timestamp lastUpdatedAt;
 

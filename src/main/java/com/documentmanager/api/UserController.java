@@ -1,5 +1,6 @@
 package com.documentmanager.api;
 
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import com.documentmanager.api.models.User;
@@ -37,8 +38,10 @@ public class UserController {
     }
 
     @RequestMapping(value = "/{userId}", method = RequestMethod.POST)
-    public ResponseEntity<?> setUser(@PathVariable String userId, @RequestBody User body)
+    public ResponseEntity<?> setUser(@PathVariable String userId, @RequestBody Map<String, Object> body)
             throws NumberFormatException, InterruptedException, ExecutionException {
+
+        System.out.println("Body : " + body);
 
         User user = this.userService.setUser(userId, body);
 
